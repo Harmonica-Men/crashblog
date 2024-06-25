@@ -1,3 +1,4 @@
+
 from django.db import models
 
 class Category(models.Model):
@@ -12,7 +13,7 @@ class Category(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return '/%s/' % self.slug
+        return f'/{self.slug}/'  # Adjusted to match your Category model
 
 class Post(models.Model):
     ACTIVE = 'active'
@@ -24,13 +25,12 @@ class Post(models.Model):
     )
 
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=200)
     slug = models.SlugField()
     intro = models.TextField()
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
-    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
 
     class Meta:
         ordering = ('-created_at',)
@@ -39,7 +39,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return '/%s/%s/' % (self.category.slug, self.slug)
+        return f'/{self.category.slug}/{self.slug}/'
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)

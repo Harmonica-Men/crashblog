@@ -3,6 +3,26 @@
 {% block title %}Home | {% endblock %}
 
 {% block content %}
+    <style>
+        .post-box {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-divider {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <p>Total posts available: {{ total_posts }}</p> 
     <section class="hero">
         <div class="hero-body">
             <div class="container">
@@ -10,19 +30,16 @@
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
                             {% for post in posts %}
-                                <div class="content is-medium">
+                                <div class="content is-medium post-box">
                                     <a href="{% url 'post_detail' post.category.slug post.slug %}">
-                                        {% if post.image %}
-                                            <figure class="image">
-                                                <img src="{{ post.image.url }}">
-                                            </figure>
-                                        {% endif %}
-
                                         <h2 class="subtitle is-4">{{ post.created_at|timesince }} ago</h2>
                                         <h1 class="title">{{ post.title }}</h1>
                                         <p>{{ post.intro }}</p>
                                     </a>
                                 </div>
+                                {% if not forloop.last %}
+                                    <hr class="post-divider">
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -30,4 +47,6 @@
             </div>
         </div>
     </section>
+   
 {% endblock %}
+
